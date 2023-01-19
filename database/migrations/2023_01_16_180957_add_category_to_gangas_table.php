@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('gangas', function (Blueprint $table) {
-            $table->bigInteger('category')->after('user_id')->nullable()->unsigned();
+            $table->bigInteger('category_id')->after('user_id')->nullable()->unsigned();
         });
     }
 
@@ -26,8 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('gangas', function (Blueprint $table) {
-            $table->foreign('category')->references('id')->on('categories')->onDelete('cascade');
-            $table->dropForeign('category');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->dropForeign('category_id');
         });
     }
 };

@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    .table th, .table td {
+        @apply px-4 py-2;
+    }
+
+    .table th{
+        @apply text-gray-700;
+    }
+
+    .table tbody tr:nth-child(2n+1){
+        @apply bg-gray-200;
+    }
+
+    h1 {
+        @apply text-2xl font-bold;
+    }
+    h2 {
+        @apply text-xl font-bold;
+    }
+    textarea {
+        resize: none;
+        @apply border border-gray-400 px-4 py-2;
+    }
+    input {
+        @apply border border-gray-400 px-4 py-2;
+    }
+    .boton {
+        @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded;
+    }
+    td>img {
+        height: 120px;
+    }
+    header>img {
+        height: 150px;
+    }
+}

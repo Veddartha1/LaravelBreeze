@@ -12,4 +12,5 @@ class Category extends Model
     public function gangas() {
         return $this->hasMany('App\Models\Ganga');
     }
+
 }
