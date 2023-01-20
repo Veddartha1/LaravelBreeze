@@ -26,10 +26,22 @@
                 <td><img src="{{ asset('storage/img/' . $ganga->id . '-ganga-severa.jpeg') }}" alt="ganga{{$ganga->id}}"></td>
                 <td>{{ $ganga->title }}</td>
                 <td>{{$ganga->description}}</td>
-                <td>{{$ganga->url}}</td>
+                <td><a href="{{$ganga->url}}">{{$ganga->url}}</a></td>
                 <td>{{$ganga->category->name}}</td>
-                <td>{{$ganga->likes}}</td>
-                <td>{{$ganga->unlikes}}</td>
+                <td>
+                    <form method="POST" action="{{route('gangas.like', $ganga->id)}}">
+                        @method('PUT')
+                        @csrf
+                        <button class="boton-like my-2" type="submit">{{$ganga->likes}}</button>
+                    </form>
+                    </td>
+                <td>
+                    <form method="POST" action="{{route('gangas.unlike', $ganga->id)}}">
+                        @method('PUT')
+                        @csrf
+                        <button class="boton-unlike my-2" type="submit">{{$ganga->unlikes}}</button>
+                    </form>
+                    </td>
                 <td>{{$ganga->price}}</td>
                 <td>{{$ganga->price_sale}}</td>
                 <td>{{$ganga->user->name}}</td>

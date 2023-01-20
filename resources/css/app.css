@@ -31,6 +31,12 @@
     .boton {
         @apply bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded;
     }
+    .boton-like {
+        @apply bg-green-500 hover:bg-green-700 text-white font-bold p-2 rounded;
+    }
+    .boton-unlike {
+        @apply bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded;
+    }
     td>img {
         height: 120px;
     }

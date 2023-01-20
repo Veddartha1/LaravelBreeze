@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [GangaController::class,'index'])->name('index');
+Route::get('/latest', [GangaController::class,'latest'])->name('latest');
+Route::get('/featured', [GangaController::class,'featured'])->name('featured');
+Route::get('/owned', [GangaController::class,'owned'])->name('owned');
+
+Route::put('/like/{id}', [GangaController::class, 'like'])->name('gangas.like');
+Route::put('/unlike/{id}', [GangaController::class, 'unlike'])->name('gangas.unlike');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

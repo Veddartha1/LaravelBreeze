@@ -17,7 +17,25 @@ class GangaController extends Controller
      */
     public function index()
     {
-        $gangas = Ganga::orderBy('id', 'ASC')->paginate(25);
+        $gangas = Ganga::orderBy('id', 'ASC')->paginate(10);
+        return view('gangas.index', compact('gangas'));
+    }
+
+    public function latest()
+    {
+        $gangas = Ganga::orderBy('created_at', 'DESC')->paginate(10);
+        return view('gangas.index', compact('gangas'));
+    }
+
+    public function featured()
+    {
+        $gangas = Ganga::orderBy('likes', 'DESC')->paginate(10);
+        return view('gangas.index', compact('gangas'));
+    }
+
+    public function owned()
+    {
+        $gangas = Ganga::orderBy('id', 'ASC')->where('user_id', Auth::id())->paginate(10);
         return view('gangas.index', compact('gangas'));
     }
 
@@ -55,9 +73,11 @@ class GangaController extends Controller
 
         $ganga->save();
 
-        $file = $request->file('image');
-        $fileName = $ganga->id . "-ganga-severa.jpeg";
-        Storage::putFileAs('public/img', $file, $fileName);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $destinationPath = 'public/img';
+            $fileName = $ganga->id . "-ganga-severa.jpeg";
+            $request->file('image')->move($destinationPath, $fileName);
+        }
 
         return redirect()->route('index');
     }
@@ -113,11 +133,13 @@ class GangaController extends Controller
             $ganga->available = $request->available;
             $ganga->save();
 
-            $file = $request->file('image');
-            $fileName = $ganga->id . "-ganga-severa.jpeg";
-            Storage::putFileAs('public/img', $file, $fileName);
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $destinationPath = 'public/img';
+                $fileName = $ganga->id . "-ganga-severa.jpeg";
+                $request->file('image')->move($destinationPath, $fileName);
+            }
         }
-        return redirect()->route('index');
+        return redirect()->route('index','imagePath');
     }
 
     /**
@@ -133,6 +155,24 @@ class GangaController extends Controller
         if (Auth::user()->rol === 'admin' || Auth::id() === $ganga->user->id) {
             $ganga->delete();
         }
+
+        return redirect()->route('index');
+    }
+
+    public function like(Request $request)
+    {
+        $ganga = Ganga::findOrFail($request->id);
+        $ganga->likes ++;
+        $ganga->save();
+
+        return redirect()->route('index');
+    }
+
+    public function unlike(Request $request)
+    {
+        $ganga = Ganga::findOrFail($request->id);
+        $ganga->unlikes ++;
+        $ganga->save();
 
         return redirect()->route('index');
     }
