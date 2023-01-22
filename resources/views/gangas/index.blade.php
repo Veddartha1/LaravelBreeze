@@ -1,8 +1,22 @@
 @extends('layouts.layout')
 @section('title', 'Índex de gangues')
 @section('content')
-    <h2>Llistat de gangues</h2>
-    <table class="table">
+
+    @if(Auth::check())
+        @if(Auth::check() && Auth::user()->rols()->first()->pivot->rol_id === 1)
+            <div class="flex mb-5 px-2 py-2 rounded bg-gray-100">
+                <a class="px-4" href="{{  route('categorias.create') }}">Afegir Categoria</a>
+                <a class="px-4" href="{{  route('categorias.index') }}">Vore Categories</a>
+            </div>
+        @endif
+        <div class="my-4">
+            <a class="boton my-4" href="{{  route('gangas.create') }}">Crear Ganga</a>
+        </div>
+    @endif
+    <div>
+        <h2 class="my-4">Llistat de gangues</h2>
+    </div>
+    <table class="table-auto table">
         <thead>
         <tr>
             <th>Id</th>
@@ -15,15 +29,22 @@
             <th>Likes</th>
             <th>Dislikes</th>
             <th>Preu</th>
-            <th>Preu de Ganga</th>
+            <th>Ganga</th>
             <th>Usuari</th>
+            <th>Accions</th>
         </tr>
         <tbody>
         @foreach($gangas as $ganga)
             <tr>
                 <td>{{$ganga->id}}</td>
                 <td>{{$ganga->available ? 'Sí' : 'No'}}</td>
-                <td><img src="{{ asset('storage/img/' . $ganga->id . '-ganga-severa.jpeg') }}" alt="ganga{{$ganga->id}}"></td>
+                <td>
+                    @if(file_exists('storage/img/' . $ganga->id . '-ganga-severa.jpeg'))
+                        <img src="{{ asset('storage/img/' . $ganga->id . '-ganga-severa.jpeg')}}" alt="ganga{{$ganga->id}}">
+                    @else
+                        <img src="storage/img/default.jpeg" alt="ganga{{$ganga->id}}">
+                    @endif
+                </td>
                 <td>{{ $ganga->title }}</td>
                 <td>{{$ganga->description}}</td>
                 <td><a href="{{$ganga->url}}">{{$ganga->url}}</a></td>
@@ -42,11 +63,11 @@
                         <button class="boton-unlike my-2" type="submit">{{$ganga->unlikes}}</button>
                     </form>
                     </td>
-                <td>{{$ganga->price}}</td>
-                <td>{{$ganga->price_sale}}</td>
+                <td>{{$ganga->price}}€</td>
+                <td>{{$ganga->price_sale}}€</td>
                 <td>{{$ganga->user->name}}</td>
                 <td>
-                    <div class="inline-flex">
+                    <div>
                         <form action="{{ route('gangas.show', $ganga->id) }}" method="GET">
                             <button class="boton">Vore</button>
                         </form>
@@ -55,24 +76,8 @@
             </tr>
         @endforeach
         </tbody>
-        <tfoot>
-        <tr>
-            <th>
-                {{$gangas->links()}}
-            </th>
-        </tr>
-        </tfoot>
     </table>
-    @if(Auth::check())
-        <a class="boton my-2" href="{{  route('gangas.create') }}">Crear Ganga</a>
-        <form method="POST" action="{{route('logout')}}">
-            @csrf
-            <button class="boton my-2" type="submit">Logout</button>
-
-        </form>
-    @else
-        <a class="boton my-2" href="{{route('login')}}">Login</a>
-        <p>O registrat si encara no ho estàs</p>
-        <a class="boton my-2" href="{{route('register')}}">Registre</a>
-    @endif
+    <div class="my-3">
+        {{$gangas->links()}}
+    </div>
 @endsection

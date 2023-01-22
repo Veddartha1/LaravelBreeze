@@ -3,6 +3,15 @@
     <a class="px-4" href="{{  route('latest') }}">Nous</a>
     <a class="px-4" href="{{  route('featured') }}">Destacats</a>
     @if(Auth::check())
-        <a class="px-4" href="{{  route('owned') }}">Gangues de {{Auth::user()->name}}</a>
+        <a class="px-4" href="{{  route('owned') }}">Pàgina de {{Auth::user()->name}}</a>
+        <form method="POST" action="{{route('logout')}}">
+            @csrf
+            <button class="px-4" type="submit">Logout</button>
+        </form>
+    @else
+        <a class="px-4" href="{{route('login')}}">Login</a>
+        <a class="px-4" href="{{route('register')}}">Registre</a>
     @endif
+
+
 </nav>

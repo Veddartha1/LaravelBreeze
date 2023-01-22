@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GangaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [GangaController::class,'index'])->name('index');
+
 Route::get('/latest', [GangaController::class,'latest'])->name('latest');
 Route::get('/featured', [GangaController::class,'featured'])->name('featured');
 Route::get('/owned', [GangaController::class,'owned'])->name('owned');
@@ -34,5 +36,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('gangas', GangaController::class);
+Route::resource('categorias', CategoryController::class);
 
 require __DIR__.'/auth.php';

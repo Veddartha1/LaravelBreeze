@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -44,5 +45,17 @@ class User extends Authenticatable
 
     public function gangas() {
         return $this->hasMany('App\Models\Ganga');
+    }
+
+    public function likes() {
+        return $this->belongsToMany('App\Models\Ganga', 'likes', 'user_id', 'ganga_id')->withPivot('liked', 'unliked')->where('user_id', '=' , Auth::id());    }
+
+    public function rols() {
+        return $this->belongsToMany('App\Models\Rol');
+    }
+
+    public function hasRol($rol)
+    {
+        return User::where('rol', $rol)->get();
     }
 }

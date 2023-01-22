@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::orderBy('id', 'ASC')->paginate(5);
+        return view('categorias.index', compact('categories'));
     }
 
     /**
@@ -24,7 +26,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('categorias.create', compact('categories'));
     }
 
     /**
@@ -35,7 +38,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category();
+
+        $category->name = $request->name;
+        $category->image = $request->image->getClientOriginalName();
+        $category->save();
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $destinationPath = 'storage/img';
+            $fileName = $request->image->getClientOriginalName();
+            $request->file('image')->move($destinationPath, $fileName);
+        }
+
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -55,9 +70,15 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        if (Auth::user()->rols('admin')) {
+            return view('categorias.edit', compact('category'));
+        } else {
+            return redirect()->route('index');
+        }
     }
 
     /**
@@ -67,9 +88,21 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        if (Auth::user()->rols()->first()->pivot->rol_id === 1) {
+            $category->name = $request->name;
+            $category->image = $request->image->getClientOriginalName();
+            $category->save();
+
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $destinationPath = 'storage/img';
+                $fileName = $request->image->getClientOriginalName();
+                $request->file('image')->move($destinationPath, $fileName);
+            }
+        }
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -78,8 +111,13 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        if (Auth::user()->rols()->first()->pivot->rol_id === 1) {
+            $category->delete();
+        }
+
+        return redirect()->route('categorias.index');
     }
 }

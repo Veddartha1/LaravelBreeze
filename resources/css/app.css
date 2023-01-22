@@ -38,9 +38,17 @@
         @apply bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded;
     }
     td>img {
-        height: 120px;
+        width: 300px;
     }
     header>img {
-        height: 150px;
+        width: 150px;
+    }
+
+    .labelStyle {
+        @apply block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4;
+    }
+
+    .inputStyle {
+        @apply bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-gray-800;
     }
 }
